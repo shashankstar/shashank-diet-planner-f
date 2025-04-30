@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head><title>Diet Plan Result</title></head>
+<body>
+    <h1>Your Diet Plan for {{ calories }} Calories (Goal: {{ goal }})</h1>
+    <table border="1">
+        <tr><th>Food</th><th>Grams</th><th>Calories</th><th>Protein</th><th>Carbs</th><th>Fat</th></tr>
+        {% for food in food_data %}
+        <tr>
+            <td>{{ food.Food }}</td>
+            <td>{{ food.Grams }}</td>
+            <td>{{ food.Calories_Total }}</td>
+            <td>{{ food.Protein_Total }}</td>
+            <td>{{ food.Carbs_Total }}</td>
+            <td>{{ food.Fat_Total }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <h3>Total:</h3>
+    <ul>
+        <li>Calories: {{ total_macro.Calories | round(1) }} kcal</li>
+        <li>Protein: {{ total_macro.Protein | round(1) }} g</li>
+        <li>Carbs: {{ total_macro.Carbs | round(1) }} g</li>
+        <li>Fat: {{ total_macro.Fat | round(1) }} g</li>
+    </ul>
+    <a href="/">Go Back</a>
+</body>
+</html>

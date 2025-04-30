@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head><title>Shashank's Smart Diet Planner</title></head>
+<body>
+    <h1>Shashank's Smart Diet Planner</h1>
+    <form action="/result" method="post">
+        <label>Enter Your Daily Calorie Target:</label><br>
+        <input type="number" name="calories" min="1200" max="6000" required><br><br>
+        <label>Select Goal:</label><br>
+        <select name="goal">
+            <option value="Weight Loss">Weight Loss</option>
+            <option value="Muscle Gain">Muscle Gain</option>
+            <option value="Strength Gain">Strength Gain</option>
+        </select><br><br>
+        <input type="submit" value="Generate Diet Plan">
+    </form>
+</body>
+</html>
