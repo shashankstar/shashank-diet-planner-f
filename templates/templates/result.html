@@ -1,0 +1,12 @@
+<h2>Your Plan for {{ calories }} kcal (Goal: {{ goal }})</h2>
+<table border="1">
+<tr>
+<th>Food</th><th>Grams</th><th>Calories</th><th>Protein</th><th>Carbs</th><th>Fat</th>
+</tr>
+{% for food in food_data %}
+<tr>
+<td>{{ food.Food }}</td><td>{{ food.Grams }}</td><td>{{ food.Calories_Total }}</td>
+<td>{{ food.Protein_Total }}</td><td>{{ food.Carbs_Total }}</td><td>{{ food.Fat_Total }}</td>
+</tr>
+{% endfor %}
+</table>
