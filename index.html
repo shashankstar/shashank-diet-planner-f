@@ -1,18 +1,328 @@
 <!DOCTYPE html>
-<html>
-<head><title>Shashank's Smart Diet Planner</title></head>
-<body>
-    <h1>Shashank's Smart Diet Planner</h1>
-    <form action="/result" method="post">
-        <label>Enter Your Daily Calorie Target:</label><br>
-        <input type="number" name="calories" min="1200" max="6000" required><br><br>
-        <label>Select Goal:</label><br>
-        <select name="goal">
-            <option value="Weight Loss">Weight Loss</option>
-            <option value="Muscle Gain">Muscle Gain</option>
-            <option value="Strength Gain">Strength Gain</option>
-        </select><br><br>
-        <input type="submit" value="Generate Diet Plan">
-    </form>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment+ | The Zero-Distraction Campus</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        .hidden { display: none !important; }
+        .loader { border: 3px solid #f3f3f3; border-top: 3px solid #1e3a8a; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .brand-gradient { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); }
+        body { -webkit-user-select: none; user-select: none; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
+
+    <nav class="brand-gradient text-white p-5 shadow-xl sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="bg-white/10 p-2.5 rounded-xl border border-white/10 backdrop-blur-md">
+                    <i class="ri-government-line text-2xl text-blue-100"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-xl leading-none tracking-tight">Appointment+</h1>
+                    <p class="text-[10px] font-medium text-blue-200 uppercase tracking-[0.2em] mt-1">Academics Uninterrupted</p>
+                </div>
+            </div>
+            <button onclick="_0xView('viewLogin')" class="text-xs font-bold bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg border border-white/20 transition flex items-center gap-2 backdrop-blur-sm">
+                <i class="ri-shield-keyhole-line"></i> Staff Access
+            </button>
+        </div>
+    </nav>
+
+    <main class="flex-grow max-w-3xl mx-auto w-full p-4">
+
+        <div id="globalLoader" class="fixed inset-0 bg-slate-900/80 flex items-center justify-center z-[60] hidden backdrop-blur-sm transition-all">
+            <div class="bg-white p-8 rounded-2xl shadow-2xl flex flex-col items-center gap-4 w-72">
+                <div class="loader w-10 h-10 border-4"></div>
+                <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Syncing...</span>
+            </div>
+        </div>
+
+        <div id="viewVisitor" class="fade-in">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8">
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl font-bold text-slate-800">Schedule a Visit</h2>
+                    <p class="text-sm text-slate-500 mt-1">Complete verification to request entry.</p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 uppercase mb-1.5 block ml-1">Meeting With</label>
+                        <div class="relative">
+                            <select id="vStaff" class="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl outline-none"><option>Loading...</option></select>
+                            <i class="ri-arrow-down-s-line absolute right-4 top-4 text-slate-400 pointer-events-none"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 uppercase mb-1.5 block ml-1">Preferred Date</label>
+                        <input type="date" id="vDate" class="w-full p-3.5 bg-white border border-slate-200 rounded-xl outline-none">
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 uppercase mb-1.5 block ml-1">Visitor Category</label>
+                        <div class="relative">
+                            <select id="vRole" class="w-full p-3.5 bg-white border border-slate-200 rounded-xl outline-none">
+                                <option value="Parent">Parent / Guardian</option>
+                                <option value="Sales">Sales / Business</option>
+                                <option value="Vendor">Vendor / Supplier</option>
+                                <option value="Official">Govt. Official</option>
+                            </select>
+                            <i class="ri-arrow-down-s-line absolute right-4 top-4 text-slate-400 pointer-events-none"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 uppercase mb-1.5 block ml-1">Your Name</label>
+                        <input type="text" id="vName" placeholder="e.g. Rajesh Sharma" class="w-full p-3.5 border border-slate-200 rounded-xl outline-none">
+                    </div>
+                </div>
+
+                <div class="bg-blue-50 p-5 rounded-xl border border-blue-100 mb-6">
+                    <h3 class="text-xs font-bold text-blue-800 uppercase mb-3 flex items-center gap-2">
+                        <i class="ri-smartphone-line"></i> Mobile Verification
+                    </h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <input type="tel" id="vPhone" placeholder="Mobile Number" class="w-full p-3 border border-blue-200 rounded-lg outline-none bg-white">
+                        <input type="email" id="vEmail" placeholder="Email (Optional)" class="w-full p-3 border border-blue-200 rounded-lg outline-none bg-white">
+                    </div>
+                </div>
+
+                <label class="text-xs font-bold text-slate-500 uppercase mb-1.5 block ml-1">Purpose</label>
+                <textarea id="vPurpose" rows="2" placeholder="Reason..." class="w-full p-3.5 border border-slate-200 rounded-xl mb-8 outline-none"></textarea>
+
+                <button onclick="_0xSubmit()" class="w-full brand-gradient text-white font-bold text-lg py-4 rounded-xl shadow-lg hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-200 flex justify-center items-center gap-3">
+                    <i class="ri-shield-check-fill"></i>
+                    <span>Verify Mobile & Submit</span>
+                </button>
+
+                <div class="mt-8 text-center border-t border-slate-100 pt-6">
+                    <button onclick="_0xCheck()" class="text-slate-500 text-sm font-medium hover:text-blue-900 hover:underline flex items-center justify-center gap-1.5 mx-auto transition-colors">
+                        <i class="ri-search-eye-line"></i> Check My Request Status
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="viewLogin" class="hidden fade-in max-w-sm mx-auto mt-16">
+            <div class="bg-white p-8 rounded-2xl shadow-2xl border border-slate-100 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-1.5 bg-blue-900"></div>
+                <h2 class="text-2xl font-bold text-center mb-1 text-slate-800">Staff Portal</h2>
+                <p class="text-xs text-center text-slate-400 mb-8 uppercase tracking-widest">Authorized Only</p>
+                
+                <div class="space-y-5">
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 uppercase ml-1">Role</label>
+                        <select id="loginRole" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg outline-none mt-1">
+                            <option value="reception">Reception Desk</option>
+                            <option value="principal">Principal / Admin</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 uppercase ml-1">Access PIN</label>
+                        <input type="password" id="loginPin" placeholder="••••" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg mt-1 tracking-[0.5em] font-bold text-center focus:bg-white transition">
+                    </div>
+                    <button onclick="_0xAuth()" class="w-full bg-slate-900 text-white py-3.5 rounded-lg font-bold hover:bg-black transition shadow-lg mt-2">Login</button>
+                    <button onclick="_0xView('viewVisitor')" class="w-full text-slate-400 text-xs hover:text-slate-600 mt-4 underline text-center block">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="viewDashboard" class="hidden fade-in">
+            <div class="flex justify-between items-end mb-6 border-b border-slate-200 pb-4">
+                <div>
+                    <h2 id="dashTitle" class="text-2xl font-bold text-slate-800">Dashboard</h2>
+                    <p class="text-xs font-medium text-blue-600 uppercase tracking-wider mt-1" id="dashSubtitle">Overview</p>
+                </div>
+                <button onclick="location.reload()" class="text-xs text-red-600 font-bold hover:bg-red-50 px-3 py-1.5 rounded-lg border border-transparent hover:border-red-100 transition flex items-center gap-1">
+                    Logout <i class="ri-logout-box-r-line"></i>
+                </button>
+            </div>
+
+            <div class="flex justify-between items-center mb-4 bg-white p-3.5 rounded-xl shadow-sm border border-slate-100">
+                 <div class="flex items-center gap-2.5">
+                    <span class="relative flex h-2.5 w-2.5">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+                    </span>
+                    <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Live Connection</span>
+                 </div>
+                 <button onclick="_0xFetch()" class="text-xs bg-slate-50 text-slate-700 px-3 py-1.5 rounded-lg font-bold hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 transition">
+                    <i class="ri-refresh-line"></i> Sync Now
+                 </button>
+            </div>
+            
+            <div id="dashContent" class="space-y-4 pb-20"></div>
+        </div>
+
+    </main>
+
+    <script>
+        // --- DIRECT URL CONFIGURATION (NO ENCRYPTION TO PREVENT ERRORS) ---
+        const API_URL = "https://script.google.com/macros/s/AKfycbzC8xPDvm0DaXo2_6sTv4rG5zLMY5O3NKvgA6QaWEMvADo9jlESDq3NjPKxtDapJisj/exec";
+
+        let _0xData = [];
+        let _0xRole = '';
+
+        function _0xInit() {
+            document.getElementById('vDate').min = new Date().toISOString().split('T')[0];
+            _0xLoadStaff();
+        }
+
+        async function _0xLoadStaff() {
+            try {
+                const r = await fetch(`${API_URL}?action=getStaff`);
+                const d = await r.json();
+                const s = document.getElementById('vStaff');
+                s.innerHTML = '<option value="">-- Select Faculty --</option>';
+                d.forEach(i => {
+                    let o = document.createElement('option');
+                    o.value = i.name; o.innerText = `${i.name} (${i.role})`;
+                    s.appendChild(o);
+                });
+            } catch(e) {
+                console.error("Connection Error:", e);
+                // If this fails, it proves the deployment or URL is wrong
+                document.getElementById('vStaff').innerHTML = '<option>System Offline (Check Deploy)</option>';
+            }
+        }
+
+        // SERVER LOGIN
+        async function _0xAuth() {
+            const r = document.getElementById('loginRole').value;
+            const p = document.getElementById('loginPin').value;
+            
+            _0xLoader(true);
+            try {
+                const response = await fetch(API_URL, { 
+                    method: 'POST', 
+                    body: JSON.stringify({ action: 'login', role: r, pin: p })
+                });
+                const result = await response.json();
+                
+                if(result.status === 'success') {
+                    _0xRole = r;
+                    document.getElementById('dashTitle').innerText = r === 'principal' ? "Principal Console" : "Reception Console";
+                    document.getElementById('dashSubtitle').innerText = r === 'principal' ? "Approvals" : "Tracking";
+                    _0xView('viewDashboard');
+                    _0xFetch();
+                } else {
+                    alert("Incorrect PIN");
+                }
+            } catch(e) { alert("Connection Error: Check if 'Settings' sheet exists."); }
+            _0xLoader(false);
+        }
+
+        async function _0xSubmit() {
+            const f = {
+                action: 'book',
+                name: document.getElementById('vName').value,
+                role: document.getElementById('vRole').value,
+                staff: document.getElementById('vStaff').value,
+                date: document.getElementById('vDate').value,
+                purpose: document.getElementById('vPurpose').value,
+                phone: document.getElementById('vPhone').value,
+                email: document.getElementById('vEmail').value || "N/A"
+            };
+
+            if(!f.name || !f.staff || !f.date || !f.purpose) return alert("Missing Fields.");
+            if(!f.phone || f.phone.length < 10) return alert("Invalid Mobile.");
+
+            _0xLoader(true);
+
+            setTimeout(async () => {
+                _0xLoader(false);
+                const code = Math.floor(1000 + Math.random() * 9000);
+                alert(`[DEMO SMS]\n\nRecipient: ${f.phone}\nOTP Code: ${code}`);
+                
+                const input = prompt("Enter OTP Verification Code:");
+                
+                if(input === String(code)) {
+                    _0xLoader(true);
+                    try {
+                        const r = await fetch(API_URL, { method: 'POST', body: JSON.stringify(f) });
+                        const d = await r.json();
+                        _0xLoader(false);
+                        if(d.status === 'error') alert(d.message);
+                        else { alert("✅ Verified. Request Transmitted."); location.reload(); }
+                    } catch(e) { _0xLoader(false); alert("Connection Error."); }
+                } else {
+                    alert("❌ Verification Failed.");
+                }
+            }, 1200);
+        }
+
+        async function _0xFetch() {
+            _0xLoader(true);
+            try {
+                const r = await fetch(`${API_URL}?action=getAppointments`);
+                _0xData = await r.json();
+                _0xRender();
+            } catch(e) {}
+            _0xLoader(false);
+        }
+
+        async function _0xAct(id, act, val) {
+            if(!confirm("Authorize Action?")) return;
+            _0xLoader(true);
+            let p = { action: act, id: id };
+            if(act === 'updateStatus') p.status = val;
+            if(act === 'markTime') p.type = val;
+            await fetch(API_URL, { method: 'POST', body: JSON.stringify(p) });
+            await _0xFetch();
+            _0xLoader(false);
+        }
+
+        function _0xRender() {
+            const l = document.getElementById('dashContent');
+            l.innerHTML = '';
+            let list = _0xData.filter(a => {
+                if(_0xRole === 'principal') return a.status === 'pending' && a.role !== 'Parent';
+                return a.status === 'approved' || (a.status === 'pending' && a.role === 'Parent');
+            }).sort((a,b) => b.id - a.id);
+
+            if(!list.length) return l.innerHTML = '<div class="text-center py-10 text-slate-400">No items.</div>';
+
+            list.forEach(a => {
+                let acts = '';
+                let bdg = a.status === 'pending' 
+                    ? `<span class="bg-yellow-100 text-yellow-800 text-[10px] px-2 py-1 rounded font-bold">PENDING</span>` 
+                    : `<span class="bg-green-100 text-green-800 text-[10px] px-2 py-1 rounded font-bold">APPROVED</span>`;
+
+                if(a.status === 'pending') {
+                    acts = `<div class="flex gap-3 mt-4 pt-4 border-t border-slate-100"><button onclick="_0xAct('${a.id}', 'updateStatus', 'approved')" class="flex-1 bg-slate-800 text-white py-2 rounded text-xs font-bold">Approve</button><button onclick="_0xAct('${a.id}', 'updateStatus', 'rejected')" class="flex-1 bg-white text-red-500 border border-red-200 py-2 rounded text-xs font-bold">Reject</button></div>`;
+                } else if (a.status === 'approved' && _0xRole === 'reception') {
+                     if(a.inTime === '-') acts = `<div class="mt-3 pt-3 border-t border-slate-100 flex gap-2"><button onclick="_0xAct('${a.id}', 'markTime', 'in')" class="flex-1 bg-blue-600 text-white py-2 rounded text-xs font-bold">IN</button><button onclick="_0xAct('${a.id}', 'markNoShow')" class="bg-slate-100 text-slate-500 px-3 py-2 rounded text-xs font-bold">No Show</button></div>`;
+                     else if(a.outTime === '-') acts = `<div class="mt-3 pt-3 border-t border-slate-100 flex justify-between items-center"><span class="text-xs font-bold text-blue-800">In: ${a.inTime}</span><button onclick="_0xAct('${a.id}', 'markTime', 'out')" class="bg-slate-800 text-white px-3 py-2 rounded text-xs font-bold">OUT</button></div>`;
+                     else acts = `<div class="mt-2 text-center text-[10px] text-slate-400 uppercase font-bold bg-slate-50 p-1 rounded">Done</div>`;
+                }
+
+                l.innerHTML += `<div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm"><div class="flex justify-between mb-3"><div><h3 class="font-bold text-slate-800 text-lg">${a.name}</h3><span class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">${a.role}</span></div><div class="text-right">${bdg}<div class="text-[10px] mt-1 text-slate-400">${a.date}</div></div></div><div class="text-xs text-slate-600 bg-slate-50 p-3 rounded-lg border border-slate-100">Meeting: <strong>${a.staff}</strong><br>"${a.purpose}"</div>${acts}</div>`;
+            });
+        }
+
+        async function _0xCheck() {
+            const n = prompt("Search Name:");
+            if(!n) return;
+            _0xLoader(true);
+            try {
+                const r = await fetch(`${API_URL}?action=getAppointments`);
+                const d = await r.json();
+                const f = d.filter(a => a.name.toLowerCase().includes(n.toLowerCase()));
+                alert(f.length ? f.map(a => `${a.date}: ${a.status.toUpperCase()} [${a.purpose.substring(0,15)}...]`).join('\n') : "Not found.");
+            } catch(e) {}
+            _0xLoader(false);
+        }
+
+        function _0xLoader(s) { document.getElementById('globalLoader').classList.toggle('hidden', !s); }
+        function _0xView(id) { ['viewVisitor', 'viewLogin', 'viewDashboard'].forEach(v => document.getElementById(v).classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); }
+        function _0xLogin() { _0xView('viewLogin'); }
+        function showLogin() { _0xLogin(); } 
+        _0xInit();
+    </script>
 </body>
 </html>
